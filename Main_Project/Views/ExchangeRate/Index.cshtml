@@ -1,0 +1,389 @@
+﻿@using Main_Project.Services.DTOs
+
+@model IReadOnlyList<FrankFurterExchangeRate>
+
+
+@{
+    ViewData["Title"] = "Currency Exchange Rates";
+
+    var baseCurrency = Context.Request.Query["Base"].ToString();
+    if (string.IsNullOrEmpty(baseCurrency))
+        baseCurrency = "USD";
+
+    var currencies = new Dictionary<string, (string Name, string Flag)>
+    {
+        ["EGP"] = ("Egyptian Pound", "🇪🇬"),
+        ["SAR"] = ("Saudi Riyal", "🇸🇦"),
+        ["AED"] = ("UAE Dirham", "🇦🇪"),
+        ["KWD"] = ("Kuwaiti Dinar", "🇰🇼"),
+        ["QAR"] = ("Qatari Riyal", "🇶🇦"),
+        ["USD"] = ("US Dollar", "🇺🇸"),
+        ["EUR"] = ("Euro", "🇪🇺"),
+        ["GBP"] = ("British Pound", "🇬🇧"),
+        ["JPY"] = ("Japanese Yen", "🇯🇵"),
+        ["CHF"] = ("Swiss Franc", "🇨🇭"),
+        ["CAD"] = ("Canadian Dollar", "🇨🇦"),
+        ["AUD"] = ("Australian Dollar", "🇦🇺"),
+        ["INR"] = ("Indian Rupee", "🇮🇳"),
+        ["CNY"] = ("Chinese Yuan", "🇨🇳"),
+        ["SGD"] = ("Singapore Dollar", "🇸🇬")
+    };
+}
+
+<div class="exchange-page">
+
+    <header class="exchange-header">
+        <div class="header-icon">
+            <i class="bi bi-globe2"></i>
+        </div>
+
+        <div>
+            <h1>Currency Exchange Rates</h1>
+            <p>Get the latest exchange rates for major currencies</p>
+        </div>
+
+    </header>
+
+    <div class="exchange-content">
+
+        <div class="exchange-toolbar">
+            <form asp-action="Index" method="get"
+                  class="currency-form">
+
+                <label for="Base">Base Currency</label>
+
+                <select name="Base" id="Base"
+                        class="form-select">
+
+                    @foreach (var currency in currencies)
+                    {
+                        <option value="@currency.Key"
+                                selected="@(baseCurrency == currency.Key)">
+                            @currency.Value.Flag
+                            @currency.Key - @currency.Value.Name
+                        </option>
+                    }
+
+                </select>
+
+                <button type="submit" class="btn-get-rates">
+                    <i class="bi bi-arrow-repeat"></i>
+                    Get Rates
+                </button>
+            </form>
+        </div>
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="update-info">
+                <i class="bi bi-calendar-check"></i>
+
+                Last Updated:
+                @Model.Max(x => x.Date)
+
+                <span class="separator">•</span>
+                Source: Frankfurter Website
+            </div>
+
+            <div class="table-responsive">
+                <table class="table exchange-table">
+
+                    <thead>
+                        <tr>
+                            <th>Currency</th>
+                            <th>Country</th>
+                            <th>Code</th>
+                            <th>Exchange Rate<br />
+                                (1 @baseCurrency = ?)
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model.OrderBy(x => x.Quote))
+                        {
+                            var currency = currencies.ContainsKey(item.Quote)
+                                ? currencies[item.Quote]
+                                : ("Unknown Currency", "🌍");
+
+                            <tr>
+                                <td class="flag-cell">
+                                    <span class="currency-flag">
+                                        @currency.Item2
+                                    </span>
+                                </td>
+
+                                <td class="currency-name">
+                                    @currency.Item1
+                                </td>
+
+                                <td>
+                                    <span class="currency-code">
+                                        @item.Quote
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="rate-value">
+                                        @item.Rate
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <i class="bi bi-currency-exchange"></i>
+                <h4>No Exchange Rates Available</h4>
+                <p>Please select another base currency or try again.</p>
+            </div>
+        }
+
+        <div class="exchange-footer">
+            <i class="bi bi-lightbulb"></i>
+            <div>
+                <strong>About Exchange Rates</strong>
+                <p>
+                    Exchange rates are reference rates updated daily.
+                    Actual bank and exchange-office rates may differ.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+.exchange-page {
+background: #f3f7fc;
+min-height: 100vh;
+padding: 25px;
+border-radius: 16px;
+}
+
+.exchange-header {
+background: linear-gradient(120deg, #102e55, #174b87);
+color: white;
+padding: 35px;
+border-radius: 16px;
+display: flex;
+align-items: center;
+gap: 22px;
+margin-bottom: 25px;
+box-shadow: 0 8px 25px rgba(16, 46, 85, .15);
+}
+
+.header-icon {
+font-size: 55px;
+color: #dbeafe;
+}
+
+.exchange-header h1 {
+font-size: 30px;
+font-weight: 700;
+margin: 0;
+}
+
+.exchange-header p {
+color: #dbeafe;
+margin: 8px 0 0;
+}
+
+.home-link {
+margin-left: auto;
+color: white;
+text-decoration: none;
+font-size: 17px;
+}
+
+.exchange-content {
+background: white;
+padding: 30px;
+border-radius: 16px;
+box-shadow: 0 5px 20px rgba(0, 0, 0, .04);
+}
+
+.exchange-toolbar {
+padding: 20px;
+border: 1px solid #e2eaf5;
+border-radius: 12px;
+margin-bottom: 20px;
+}
+
+.currency-form {
+display: flex;
+align-items: center;
+gap: 18px;
+}
+
+.currency-form label {
+font-weight: 700;
+white-space: nowrap;
+color: #172e52;
+}
+
+.currency-form select {
+flex: 1;
+min-width: 0;
+padding: 13px;
+border: 1px solid #cbd8e9;
+border-radius: 9px;
+}
+
+.btn-get-rates {
+background: #1558b0;
+color: white;
+border: none;
+border-radius: 9px;
+padding: 13px 28px;
+font-weight: 600;
+white-space: nowrap;
+transition: .2s;
+}
+
+.btn-get-rates:hover {
+background: #103f83;
+transform: translateY(-2px);
+}
+
+.update-info {
+background: #eaf2ff;
+color: #173c70;
+padding: 14px 18px;
+border-radius: 9px;
+margin-bottom: 20px;
+}
+
+.update-info i {
+margin-right: 8px;
+}
+
+.separator {
+margin: 0 12px;
+}
+
+.exchange-table {
+border: 1px solid #d7e2f0;
+border-radius: 10px;
+overflow: hidden;
+vertical-align: middle;
+text-align: center;
+}
+
+.exchange-table thead {
+background: #15375f;
+color: white;
+}
+
+.exchange-table th {
+padding: 18px 12px;
+font-weight: 600;
+border: none;
+}
+
+.exchange-table td {
+padding: 13px;
+border-color: #e1e8f1;
+}
+
+.exchange-table tbody tr:hover {
+background: #f3f7ff;
+}
+
+.currency-flag {
+font-size: 27px;
+}
+
+.currency-name {
+font-weight: 600;
+text-align: left;
+}
+
+.currency-code {
+color: #294b78;
+font-weight: 600;
+}
+
+.rate-value {
+display: inline-block;
+min-width: 110px;
+background: #dcf5e7;
+color: #146b3a;
+padding: 8px 15px;
+border-radius: 8px;
+font-weight: 700;
+}
+
+.exchange-footer {
+display: flex;
+align-items: center;
+gap: 16px;
+background: #eaf2ff;
+border: 1px solid #c9ddff;
+padding: 18px;
+border-radius: 12px;
+margin-top: 25px;
+color: #173c70;
+}
+
+.exchange-footer > i {
+font-size: 30px;
+}
+
+.exchange-footer strong {
+font-size: 18px;
+}
+
+.exchange-footer p {
+margin: 5px 0 0;
+}
+
+.empty-state {
+text-align: center;
+padding: 60px 20px;
+color: #64748b;
+}
+
+.empty-state i {
+font-size: 50px;
+color: #2563eb;
+}
+
+@@media (max-width: 768px) {
+.exchange-page {
+padding: 12px;
+}
+
+.exchange-header {
+padding: 22px;
+flex-wrap: wrap;
+}
+
+.exchange-header h1 {
+font-size: 22px;
+}
+
+.currency-form {
+flex-direction: column;
+align-items: stretch;
+}
+
+.currency-form label {
+white-space: normal;
+}
+
+.exchange-content {
+padding: 15px;
+}
+
+.home-link {
+margin-left: 0;
+}
+}
+
+</style>
