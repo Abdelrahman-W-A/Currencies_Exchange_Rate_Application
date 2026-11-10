@@ -30,9 +30,27 @@
     };
 }
 
+<nav class="market-navigation">
+    <a asp-controller="ExchangeRate"
+       asp-action="Index"
+       class="market-nav-link active">
+        <i class="bi bi-currency-exchange"></i>
+        Currency Exchange
+    </a>
+
+    <a asp-controller="ExchangeRate"
+       asp-action="PreciousMetals"
+       class="market-nav-link">
+        <i class="bi bi-gem"></i>
+        Precious Metals
+    </a>
+</nav>
+
 <div class="exchange-page">
 
     <header class="exchange-header">
+
+
         <div class="header-icon">
             <i class="bi bi-globe2"></i>
         </div>
@@ -82,7 +100,7 @@
                 @Model.Max(x => x.Date)
 
                 <span class="separator">•</span>
-                Source: Frankfurter Website
+                Source: Frank Furter
             </div>
 
             <div class="table-responsive">
@@ -93,7 +111,8 @@
                             <th>Currency</th>
                             <th>Country</th>
                             <th>Code</th>
-                            <th>Exchange Rate<br />
+                            <th>
+                                Exchange Rate<br />
                                 (1 @baseCurrency = ?)
                             </th>
                         </tr>
@@ -159,231 +178,274 @@
 </div>
 
 <style>
-.exchange-page {
-background: #f3f7fc;
-min-height: 100vh;
-padding: 25px;
-border-radius: 16px;
-}
+    .exchange-page {
+        background: #f3f7fc;
+        min-height: 100vh;
+        padding: 25px;
+        border-radius: 16px;
+    }
 
-.exchange-header {
-background: linear-gradient(120deg, #102e55, #174b87);
-color: white;
-padding: 35px;
-border-radius: 16px;
-display: flex;
-align-items: center;
-gap: 22px;
-margin-bottom: 25px;
-box-shadow: 0 8px 25px rgba(16, 46, 85, .15);
-}
+    .exchange-header {
+        background: linear-gradient(120deg, #102e55, #174b87);
+        color: white;
+        padding: 35px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 25px rgba(16, 46, 85, .15);
+    }
 
-.header-icon {
-font-size: 55px;
-color: #dbeafe;
-}
+    .header-icon {
+        font-size: 55px;
+        color: #dbeafe;
+    }
 
-.exchange-header h1 {
-font-size: 30px;
-font-weight: 700;
-margin: 0;
-}
+    .exchange-header h1 {
+        font-size: 30px;
+        font-weight: 700;
+        margin: 0;
+    }
 
-.exchange-header p {
-color: #dbeafe;
-margin: 8px 0 0;
-}
+    .exchange-header p {
+        color: #dbeafe;
+        margin: 8px 0 0;
+    }
 
-.home-link {
-margin-left: auto;
-color: white;
-text-decoration: none;
-font-size: 17px;
-}
+    .home-link {
+        margin-left: auto;
+        color: white;
+        text-decoration: none;
+        font-size: 17px;
+    }
 
-.exchange-content {
-background: white;
-padding: 30px;
-border-radius: 16px;
-box-shadow: 0 5px 20px rgba(0, 0, 0, .04);
-}
+    .exchange-content {
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, .04);
+    }
 
-.exchange-toolbar {
-padding: 20px;
-border: 1px solid #e2eaf5;
-border-radius: 12px;
-margin-bottom: 20px;
-}
+    .exchange-toolbar {
+        padding: 20px;
+        border: 1px solid #e2eaf5;
+        border-radius: 12px;
+        margin-bottom: 20px;
+    }
 
-.currency-form {
-display: flex;
-align-items: center;
-gap: 18px;
-}
+    .currency-form {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }
 
-.currency-form label {
-font-weight: 700;
-white-space: nowrap;
-color: #172e52;
-}
+        .currency-form label {
+            font-weight: 700;
+            white-space: nowrap;
+            color: #172e52;
+        }
 
-.currency-form select {
-flex: 1;
-min-width: 0;
-padding: 13px;
-border: 1px solid #cbd8e9;
-border-radius: 9px;
-}
+        .currency-form select {
+            flex: 1;
+            min-width: 0;
+            padding: 13px;
+            border: 1px solid #cbd8e9;
+            border-radius: 9px;
+        }
 
-.btn-get-rates {
-background: #1558b0;
-color: white;
-border: none;
-border-radius: 9px;
-padding: 13px 28px;
-font-weight: 600;
-white-space: nowrap;
-transition: .2s;
-}
+    .btn-get-rates {
+        background: #1558b0;
+        color: white;
+        border: none;
+        border-radius: 9px;
+        padding: 13px 28px;
+        font-weight: 600;
+        white-space: nowrap;
+        transition: .2s;
+    }
 
-.btn-get-rates:hover {
-background: #103f83;
-transform: translateY(-2px);
-}
+        .btn-get-rates:hover {
+            background: #103f83;
+            transform: translateY(-2px);
+        }
 
-.update-info {
-background: #eaf2ff;
-color: #173c70;
-padding: 14px 18px;
-border-radius: 9px;
-margin-bottom: 20px;
-}
+    .update-info {
+        background: #eaf2ff;
+        color: #173c70;
+        padding: 14px 18px;
+        border-radius: 9px;
+        margin-bottom: 20px;
+    }
 
-.update-info i {
-margin-right: 8px;
-}
+        .update-info i {
+            margin-right: 8px;
+        }
 
-.separator {
-margin: 0 12px;
-}
+    .separator {
+        margin: 0 12px;
+    }
 
-.exchange-table {
-border: 1px solid #d7e2f0;
-border-radius: 10px;
-overflow: hidden;
-vertical-align: middle;
-text-align: center;
-}
+    .exchange-table {
+        border: 1px solid #d7e2f0;
+        border-radius: 10px;
+        overflow: hidden;
+        vertical-align: middle;
+        text-align: center;
+    }
 
-.exchange-table thead {
-background: #15375f;
-color: white;
-}
+        .exchange-table thead {
+            background: #15375f;
+            color: white;
+        }
 
-.exchange-table th {
-padding: 18px 12px;
-font-weight: 600;
-border: none;
-}
+        .exchange-table th {
+            padding: 18px 12px;
+            font-weight: 600;
+            border: none;
+        }
 
-.exchange-table td {
-padding: 13px;
-border-color: #e1e8f1;
-}
+        .exchange-table td {
+            padding: 13px;
+            border-color: #e1e8f1;
+        }
 
-.exchange-table tbody tr:hover {
-background: #f3f7ff;
-}
+        .exchange-table tbody tr:hover {
+            background: #f3f7ff;
+        }
 
-.currency-flag {
-font-size: 27px;
-}
+    .currency-flag {
+        font-size: 27px;
+    }
 
-.currency-name {
-font-weight: 600;
-text-align: left;
-}
+    .currency-name {
+        font-weight: 600;
+        text-align: left;
+    }
 
-.currency-code {
-color: #294b78;
-font-weight: 600;
-}
+    .currency-code {
+        color: #294b78;
+        font-weight: 600;
+    }
 
-.rate-value {
-display: inline-block;
-min-width: 110px;
-background: #dcf5e7;
-color: #146b3a;
-padding: 8px 15px;
-border-radius: 8px;
-font-weight: 700;
-}
+    .rate-value {
+        display: inline-block;
+        min-width: 110px;
+        background: #dcf5e7;
+        color: #146b3a;
+        padding: 8px 15px;
+        border-radius: 8px;
+        font-weight: 700;
+    }
 
-.exchange-footer {
-display: flex;
-align-items: center;
-gap: 16px;
-background: #eaf2ff;
-border: 1px solid #c9ddff;
-padding: 18px;
-border-radius: 12px;
-margin-top: 25px;
-color: #173c70;
-}
+    .exchange-footer {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        background: #eaf2ff;
+        border: 1px solid #c9ddff;
+        padding: 18px;
+        border-radius: 12px;
+        margin-top: 25px;
+        color: #173c70;
+    }
 
-.exchange-footer > i {
-font-size: 30px;
-}
+        .exchange-footer > i {
+            font-size: 30px;
+        }
 
-.exchange-footer strong {
-font-size: 18px;
-}
+        .exchange-footer strong {
+            font-size: 18px;
+        }
 
-.exchange-footer p {
-margin: 5px 0 0;
-}
+        .exchange-footer p {
+            margin: 5px 0 0;
+        }
 
-.empty-state {
-text-align: center;
-padding: 60px 20px;
-color: #64748b;
-}
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #64748b;
+    }
 
-.empty-state i {
-font-size: 50px;
-color: #2563eb;
-}
+        .empty-state i {
+            font-size: 50px;
+            color: #2563eb;
+        }
 
-@@media (max-width: 768px) {
-.exchange-page {
-padding: 12px;
-}
+    @@media (max-width: 768px) {
+        .exchange-page {
+            padding: 12px;
+        }
 
-.exchange-header {
-padding: 22px;
-flex-wrap: wrap;
-}
+        .exchange-header {
+            padding: 22px;
+            flex-wrap: wrap;
+        }
 
-.exchange-header h1 {
-font-size: 22px;
-}
+            .exchange-header h1 {
+                font-size: 22px;
+            }
 
-.currency-form {
-flex-direction: column;
-align-items: stretch;
-}
+        .currency-form {
+            flex-direction: column;
+            align-items: stretch;
+        }
 
-.currency-form label {
-white-space: normal;
-}
+            .currency-form label {
+                white-space: normal;
+            }
 
-.exchange-content {
-padding: 15px;
-}
+        .exchange-content {
+            padding: 15px;
+        }
 
-.home-link {
-margin-left: 0;
-}
-}
+        .home-link {
+            margin-left: 0;
+        }
+    }
+
+    .market-navigation {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 25px;
+        background: white;
+        padding: 12px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, .04);
+    }
+
+    .market-nav-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        padding: 12px 22px;
+        border-radius: 9px;
+        color: #173c70;
+        text-decoration: none;
+        font-weight: 600;
+        transition: .2s;
+    }
+
+        .market-nav-link:hover {
+            background: #eaf2ff;
+            color: #1558b0;
+        }
+
+        .market-nav-link.active {
+            background: #1558b0;
+            color: white;
+        }
+
+    @@media (max-width: 576px) {
+        .market-navigation {
+            flex-direction: column;
+        }
+
+        .market-nav-link {
+            width: 100%;
+        }
+    }
 
 </style>

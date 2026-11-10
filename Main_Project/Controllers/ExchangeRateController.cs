@@ -14,5 +14,11 @@ namespace Main_Project.Controllers
             return View(exchangeRates);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> PreciousMetals(CancellationToken ct = default)
+        {
+            var preciousMetals = await _exchangeRateService.GetPreciousMetalsAsync(ct);
+            return View(preciousMetals);
+        }
     }
 }

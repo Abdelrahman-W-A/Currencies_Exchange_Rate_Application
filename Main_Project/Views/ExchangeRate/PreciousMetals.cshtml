@@ -1,0 +1,385 @@
+﻿@using Main_Project.Services.DTOs
+@model IReadOnlyList<PreciousMetal>
+
+@{
+    ViewData["Title"] = "Precious Metals Prices";
+}
+
+<nav class="market-navigation">
+    <a asp-controller="ExchangeRate"
+       asp-action="Index"
+       class="market-nav-link">
+        <i class="bi bi-currency-exchange"></i>
+        Currency Exchange
+    </a>
+
+    <a asp-controller="ExchangeRate"
+       asp-action="PreciousMetals"
+       class="market-nav-link active">
+        <i class="bi bi-gem"></i>
+        Precious Metals
+    </a>
+</nav>
+
+<div class="metals-page">
+
+    <header class="metals-header">
+
+
+        <div class="header-icon">
+            <i class="bi bi-gem"></i>
+        </div>
+
+        <div>
+            <h1>Precious Metals Prices</h1>
+            <p>Track the latest prices of the world's top precious metals</p>
+        </div>
+    </header>
+
+    <div class="metals-content">
+
+        <div class="metals-info">
+            <i class="bi bi-graph-up-arrow"></i>
+            <span>Live Precious Metals Market Data</span>
+
+            <span class="source">
+                Source: Kitco
+            </span>
+        </div>
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table metals-table">
+
+                    <thead>
+                        <tr>
+                            <th>Metal</th>
+                            <th>Symbol</th>
+                            <th>Ask</th>
+                            <th>Bid</th>
+                            <th>Mid</th>
+                            <th>Change</th>
+                            <th>Change %</th>
+                            <th>High</th>
+                            <th>Low</th>
+                            <th>Unit</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var metal in Model)
+                        {
+                            <tr>
+                                <td class="metal-name">
+                                    <strong>@metal.Name</strong>
+                                </td>
+
+                                <td>
+                                    <span class="metal-symbol">
+                                        @metal.Symbol
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="price-value">
+                                        @metal.ask
+                                    </span>
+                                </td>
+
+                                <td>@metal.bid</td>
+
+                                <td>@metal.mid</td>
+
+                                <td class="@(decimal.TryParse(metal.change, out var change) && change >= 0 ? "positive" : "negative")">
+                                    @metal.change
+                                </td>
+
+                                <td class="@(decimal.TryParse(metal.changePercentage, out var percentage) && percentage >= 0 ? "positive" : "negative")">
+                                    @metal.changePercentage%
+                                </td>
+
+                                <td>@metal.high</td>
+
+                                <td>@metal.low</td>
+
+                                <td>
+                                    <span class="unit-badge">
+                                        @metal.unit
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <i class="bi bi-gem"></i>
+                <h4>No Precious Metals Data Available</h4>
+                <p>Please try again later.</p>
+            </div>
+        }
+
+        <div class="metals-footer">
+            <i class="bi bi-info-circle"></i>
+
+            <div>
+                <strong>About Precious Metals Prices</strong>
+
+                <p>
+                    Prices are quoted in USD per ounce.
+                    Ask represents the selling price, Bid represents
+                    the buying price, and Mid represents the midpoint
+                    between Ask and Bid.
+                    Actual market prices may vary.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    .metals-page {
+        background: #f3f7fc;
+        min-height: 100vh;
+        padding: 25px;
+        border-radius: 16px;
+    }
+
+    .metals-header {
+        background: linear-gradient(120deg, #102e55, #174b87);
+        color: white;
+        padding: 35px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 25px rgba(16, 46, 85, .15);
+    }
+
+    .header-icon {
+        font-size: 55px;
+        color: #dbeafe;
+    }
+
+    .metals-header h1 {
+        font-size: 30px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .metals-header p {
+        color: #dbeafe;
+        margin: 8px 0 0;
+    }
+
+    .metals-content {
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, .04);
+    }
+
+    .metals-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: #eaf2ff;
+        color: #173c70;
+        padding: 15px 18px;
+        border-radius: 9px;
+        margin-bottom: 22px;
+        font-weight: 600;
+    }
+
+        .metals-info i {
+            font-size: 20px;
+        }
+
+    .source {
+        margin-left: auto;
+        font-weight: 500;
+        font-size: 14px;
+    }
+
+    .metals-table {
+        border: 1px solid #d7e2f0;
+        border-radius: 10px;
+        overflow: hidden;
+        vertical-align: middle;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+        .metals-table thead {
+            background: #15375f;
+            color: white;
+        }
+
+        .metals-table th {
+            padding: 18px 14px;
+            font-weight: 600;
+            border: none;
+        }
+
+        .metals-table td {
+            padding: 16px 14px;
+            border-color: #e1e8f1;
+        }
+
+        .metals-table tbody tr:hover {
+            background: #f3f7ff;
+        }
+
+    .metal-name {
+        color: #173c70;
+        text-align: left;
+    }
+
+    .metal-symbol {
+        display: inline-block;
+        background: #eaf2ff;
+        color: #1558b0;
+        padding: 6px 12px;
+        border-radius: 7px;
+        font-weight: 700;
+    }
+
+    .price-value {
+        color: #146b3a;
+        font-weight: 700;
+    }
+
+    .positive {
+        color: #15803d;
+        font-weight: 700;
+    }
+
+    .negative {
+        color: #dc2626;
+        font-weight: 700;
+    }
+
+    .unit-badge {
+        background: #f1f5f9;
+        color: #475569;
+        padding: 6px 10px;
+        border-radius: 7px;
+        font-size: 13px;
+    }
+
+    .metals-footer {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        background: #eaf2ff;
+        border: 1px solid #c9ddff;
+        padding: 18px;
+        border-radius: 12px;
+        margin-top: 25px;
+        color: #173c70;
+    }
+
+        .metals-footer > i {
+            font-size: 30px;
+        }
+
+        .metals-footer strong {
+            font-size: 18px;
+        }
+
+        .metals-footer p {
+            margin: 5px 0 0;
+        }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #64748b;
+    }
+
+        .empty-state i {
+            font-size: 50px;
+            color: #2563eb;
+        }
+
+    @@media (max-width: 768px) {
+        .metals-page {
+            padding: 12px;
+        }
+
+        .metals-header {
+            padding: 22px;
+        }
+
+            .metals-header h1 {
+                font-size: 22px;
+            }
+
+        .metals-content {
+            padding: 15px;
+        }
+
+        .metals-info {
+            flex-wrap: wrap;
+        }
+
+        .source {
+            margin-left: 0;
+            width: 100%;
+        }
+
+        .metals-footer {
+            align-items: flex-start;
+        }
+    }
+
+    .market-navigation {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 25px;
+        background: white;
+        padding: 12px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, .04);
+    }
+
+    .market-nav-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        padding: 12px 22px;
+        border-radius: 9px;
+        color: #173c70;
+        text-decoration: none;
+        font-weight: 600;
+        transition: .2s;
+    }
+
+        .market-nav-link:hover {
+            background: #eaf2ff;
+            color: #1558b0;
+        }
+
+        .market-nav-link.active {
+            background: #1558b0;
+            color: white;
+        }
+
+    @@media (max-width: 576px) {
+        .market-navigation {
+            flex-direction: column;
+        }
+
+        .market-nav-link {
+            width: 100%;
+        }
+    }
+</style>

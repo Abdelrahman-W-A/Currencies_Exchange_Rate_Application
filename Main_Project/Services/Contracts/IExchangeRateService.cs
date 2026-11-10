@@ -5,5 +5,6 @@ namespace Main_Project.Services.Contracts
     public interface IExchangeRateService
     {
         public Task<IReadOnlyList<FrankFurterExchangeRate>> GetCurrenciesExchangeRateAsync(string Base, CancellationToken ct = default);
+        public Task<IReadOnlyList<PreciousMetal>> GetPreciousMetalsAsync(CancellationToken ct = default);
     }
 }
